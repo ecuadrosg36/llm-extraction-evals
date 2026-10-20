@@ -1,0 +1,28 @@
+version: 2
+models:
+  - name: fct_receipts
+    columns:
+      - name: run_key
+        data_tests: [not_null, unique]
+      - name: receipt_id
+        data_tests: [not_null]
+      - name: receipt_date
+        data_tests: [not_null]
+      - name: subtotal
+        data_tests: [not_null]
+      - name: total
+        data_tests: [not_null]
+      - name: tax
+        data_tests: [not_null]
+  - name: fct_line_items
+    columns:
+      - name: line_id
+        data_tests: [not_null, unique]
+      - name: amount
+        data_tests: [not_null]
+      - name: run_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('fct_receipts')
+                field: run_key
