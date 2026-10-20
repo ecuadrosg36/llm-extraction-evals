@@ -74,7 +74,11 @@ def money(text: str) -> Decimal:
 def validate(receipt: Receipt, threshold: float = 0.8) -> list[str]:
     reasons = []
     try:
-        date.fromisoformat(receipt.date.value or "")
+        parsed_date = date.fromisoformat(receipt.date.value or "")
+        # Python also accepts compact and ISO week dates; preserve only the
+        # documented calendar representation that the warehouse casts directly.
+        if parsed_date.isoformat() != receipt.date.value:
+            raise ValueError("Date must use YYYY-MM-DD")
     except ValueError:
         reasons.append("unparseable_date")
     amounts = [item.amount.value for item in receipt.line_items]

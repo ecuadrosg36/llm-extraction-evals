@@ -9,7 +9,7 @@ measured engineering checks from model results.
 | Actual result | Status |
 |---|---|
 | Fixed CORD sample | 200 receipts downloaded and hash-verified |
-| Offline tests | 22 passed, including Postgres review integration |
+| Offline tests | 25 passed, including Postgres review integration |
 | Warehouse checks | 5 dbt models and 17 data tests passed |
 | Live field accuracy, cost, latency | Pending; no paid calls made |
 | Cached demo | Implemented; timing pending genuine response cache |
@@ -38,8 +38,9 @@ dates, and low confidence enter review. Human corrections create new labels;
 they do not rewrite the benchmark or model response. Marts include accepted
 outputs and validated corrections; evaluation includes failures too.
 
-Next work: supply the local key, run the bounded live warmup, publish actual
-field-level results, and time the cached demo. Independently label merchant/date,
+Next work: supply the local key and decide how to fund the full fixed sample,
+then publish actual field-level results and time the cached demo. A smaller
+evaluation population requires an explicit decision. Independently label merchant/date,
 measure confidence calibration, and extend reconciliation for receipts with
 service charges/discounts rather than silently relaxing the current rules.
 
@@ -68,7 +69,7 @@ model IDs are preserved. No model substitutions occur.
 
 ```sh
 uv run receipts estimate --limit 20
-# Explicit paid warmup: only after key and prices are checked.
+# Proposed paid warmup: only after key, prices, and subset plan are approved.
 uv run receipts extract --live --limit 20
 uv run receipts validate
 uv run receipts dbt
@@ -82,7 +83,8 @@ warehouse and evaluates without live calls. Its under-5-minute target is pending
 measurement. Run the sample download and paid cache warmup separately. A cache
 miss fails explicitly. Dagster also uses cache-only extraction; live warmup is a
 separate, visible action. Run `receipts extract --live` for the complete sample
-only if its remaining cost fits the authorized cap. The runner stops at $5;
+only after the full-sample budget blocker is resolved and its remaining cost
+fits the authorized cap. The runner stops at $5;
 never reset `data/spend.json` to continue spending.
 
 ## Review and warehouse development

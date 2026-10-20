@@ -44,7 +44,9 @@ plugins for predictable offline behavior.
 Amounts use Decimal; grouping separators are removed from CORD labels with an
 explicit Indonesian currency parser. Extraction values are numeric currency
 units. Item amounts mean extended totals. Equality is exact in native units;
-no floating-point tolerance hides discrepancies. Dates must parse as ISO dates.
+no floating-point tolerance hides discrepancies. Dates must parse and round-trip
+exactly as YYYY-MM-DD calendar dates; compact and ISO week representations are
+rejected before warehouse casting.
 Absent tax stays absent; service charges and discounts currently cause review
 when the required equalities do not hold. This conservative contract is a known
 coverage limitation, not evidence of model error by itself.
@@ -60,7 +62,9 @@ identity is asserted locally; authentication/RBAC is future work.
 ## Orchestration and operations
 
 Dagster assets express ingest → extract → validate → dbt → evals. A blocking fixed
-sample asset check verifies size; the quality asset check exposes review workload.
+sample asset check verifies size; the quality asset check counts pending queue
+entries. Completed reviews stop contributing even when validation rechecks the
+original rejected response; rejection history is preserved.
 Rejected rows remain queryable and do not enter the warehouse until corrected.
 The evaluation asset reads every model response, including rejected records.
 

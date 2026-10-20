@@ -43,8 +43,10 @@ human labels; review corrections remain separate from this fixed benchmark.
 ## Validation completed
 
 - Python **3.12.13** with locked uv dependencies.
-- **22 pytest tests passed**, including Postgres review/correction integration,
-  synthetic response parsing, arithmetic/date rejection, content cache behavior,
+- **25 pytest tests passed**, including Postgres review/correction integration,
+  synthetic response parsing, arithmetic/date rejection (including ISO week
+  and compact dates), revalidation after resolved human review, content cache
+  behavior,
   missing-key handling, budget rejection, timeout reservation, and malformed
   paid-response caching. All provider responses in tests are synthetic mocks.
 - dbt build passed **5 models and 17 data tests** against **Postgres 16**, using
@@ -72,10 +74,12 @@ actual bill. The same envelope for the initial **60-call** demo warmup is
 actual usage is metered after each response. The durable ledger keeps uncertain
 calls reserved and refuses any request that could exceed the **$5** cap.
 
-This does not authorize the larger estimate. Start with `--limit 20`, inspect
-the actual ledger, then continue only within the cap. Stop and ask before any
-budget increase. Never delete the ledger to bypass it. Disk cache hits make no
-provider calls; they retain original acquisition cost/latency in evaluation.
+The full fixed-sample run remains blocked by this estimate as well as the
+missing key. A lower-cost `--limit 20` warmup is only a proposal pending an
+explicit user decision; it must never be presented as completing the fixed-sample
+evaluation. Inspect the actual ledger before continuing any approved run. Stop
+and ask before any budget increase. Never delete the ledger to bypass it. Disk
+cache hits make no provider calls; they retain original acquisition cost/latency in evaluation.
 
 Sources: [models](https://platform.claude.com/docs/en/models/overview),
 [pricing](https://platform.claude.com/docs/en/about-claude/pricing),
@@ -102,5 +106,7 @@ not a new paid run and must not be added to cumulative spend a second time.
 - API key must be supplied in a gitignored `.env` through the local filesystem.
 - Live field accuracy/cost/latency and genuine response cache are pending.
 - Cached demo timing is pending those responses.
-- Full-sample completion may require a budget decision after the initial run;
-  no spending above the authorized cap is permitted.
+- The conservative full-sample estimate exceeds the authorized cap and requires
+  a budget decision before proceeding. A smaller evaluated population requires
+  explicit approval and cannot substitute for the requested fixed-sample results.
+  No spending above the authorized cap is permitted.

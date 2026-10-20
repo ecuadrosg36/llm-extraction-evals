@@ -28,7 +28,7 @@ def validate():
     with store.connect() as conn:
         store.validate_all(conn)
         return conn.execute(
-            "select count(*) from raw.extractions where status='rejected'"
+            "select count(*) from raw.review_queue where status='pending'"
         ).fetchone()[0]
 
 
@@ -49,7 +49,8 @@ def fixed_sample(ingest):
 
 @asset_check(asset=validate)
 def quality_gate(validate):
-    # Rejected receipts are quarantined, not silently dropped; fail signals review workload.
+    # Original rejected outputs remain immutable after review; only pending cases
+    # represent work still required from a reviewer.
     return AssetCheckResult(passed=validate == 0, metadata={"review_required": validate})
 
 
