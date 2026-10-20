@@ -146,3 +146,26 @@ def test_review_and_idempotence():
         with pytest.raises(ValueError, match="pending"):
             store.review(conn, "synthetic-1", "test-reviewer")
         conn.rollback()
+
+
+def test_recorded_synthetic_fixture():
+    from pathlib import Path
+
+    fixture = json.loads((Path(__file__).parent / "fixtures/synthetic-receipt.json").read_text())
+    assert fixture["origin"] == "synthetic-recorded-fixture"
+    assert validate(Receipt.model_validate(fixture["receipt"])) == []
+
+
+def test_multifragment_cord_name():
+    targets = cord_targets(
+        {"gt_parse": {"menu": {"nm": ["-", "Synthetic Meal"], "price": "1.000"}}}
+    )
+    assert targets["line_items"] == [{"name": "- synthetic meal", "amount": "1000"}]
+
+
+def test_public_manifest_matches_seed():
+    from pathlib import Path
+
+    manifest = json.loads(Path("docs/sample-manifest.json").read_text())
+    assert [r["index"] for r in manifest["receipts"]] == selected_indices()
+    assert all(len(r["sha256"]) == 64 for r in manifest["receipts"])

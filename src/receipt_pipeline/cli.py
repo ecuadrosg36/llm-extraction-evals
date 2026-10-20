@@ -15,11 +15,11 @@ def run_extract(root, live=False, limit=None):
     manifest = load_manifest(root)
     extractor = Extractor(root, live=live)
     responses = []
-    for model, prompt in VARIANTS:
-        for row in manifest["receipts"][:limit]:
-            image_path = Path(row["image"])
-            if hashlib.sha256(image_path.read_bytes()).hexdigest() != row["sha256"]:
-                raise ValueError(f"Image content changed: {row['id']}")
+    for row in manifest["receipts"][:limit]:
+        image_path = Path(row["image"])
+        if hashlib.sha256(image_path.read_bytes()).hexdigest() != row["sha256"]:
+            raise ValueError(f"Image content changed: {row['id']}")
+        for model, prompt in VARIANTS:
             response = extractor.run(image_path, model, prompt)
             with store.connect() as conn:
                 store.save_extraction(conn, row["id"], response)

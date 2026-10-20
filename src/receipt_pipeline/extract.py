@@ -5,6 +5,7 @@ import fcntl
 import hashlib
 import json
 import time
+from datetime import UTC, datetime
 from pathlib import Path
 
 from dotenv import dotenv_values
@@ -147,6 +148,9 @@ class Extractor:
                 "cost_usd": cost,
                 "usage": usage.model_dump(),
                 "origin": "anthropic_live",
+                "acquired_at": datetime.now(UTC).isoformat(),
+                "provider_request_id": getattr(response, "id", None),
+                "counted_input_tokens": count,
             }
             try:
                 if response.stop_reason != "end_turn":

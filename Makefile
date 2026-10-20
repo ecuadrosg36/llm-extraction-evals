@@ -9,7 +9,7 @@ demo:
 	uv run receipts demo
 check:
 	uv run ruff check .
-	uv run pytest
+	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 DEEPEVAL_TELEMETRY_OPT_OUT=YES uv run pytest
 dbt:
 	uv run receipts dbt
 dagster:

@@ -34,9 +34,12 @@ def cord_targets(labels):
         items = []
         try:
             for item in menu:
-                items.append(
-                    {"name": item["nm"].strip().casefold(), "amount": str(money(item["price"]))}
-                )
+                name = item["nm"]
+                if isinstance(name, list) and all(isinstance(x, str) for x in name):
+                    name = " ".join(name)
+                if not isinstance(name, str) or not isinstance(item["price"], str):
+                    raise ValueError("ambiguous CORD menu value")
+                items.append({"name": name.strip().casefold(), "amount": str(money(item["price"]))})
             targets["line_items"] = items
         except (KeyError, ValueError, TypeError):
             pass

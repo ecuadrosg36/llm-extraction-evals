@@ -1,0 +1,89 @@
+{
+  "origin": "synthetic-recorded-fixture",
+  "receipt": {
+    "merchant": {
+      "value": "Synthetic Cafe",
+      "evidence": {
+        "span": "Synthetic Cafe",
+        "region": []
+      },
+      "confidence": 0.95,
+      "model": "synthetic-fixture",
+      "prompt_version": "fixture-v1"
+    },
+    "date": {
+      "value": "2026-01-01",
+      "evidence": {
+        "span": "2026-01-01",
+        "region": []
+      },
+      "confidence": 0.95,
+      "model": "synthetic-fixture",
+      "prompt_version": "fixture-v1"
+    },
+    "line_items": [
+      {
+        "name": {
+          "value": "Coffee",
+          "evidence": {
+            "span": "Coffee",
+            "region": []
+          },
+          "confidence": 0.95,
+          "model": "synthetic-fixture",
+          "prompt_version": "fixture-v1"
+        },
+        "quantity": {
+          "value": "2",
+          "evidence": {
+            "span": "2",
+            "region": []
+          },
+          "confidence": 0.95,
+          "model": "synthetic-fixture",
+          "prompt_version": "fixture-v1"
+        },
+        "amount": {
+          "value": "100",
+          "evidence": {
+            "span": "100",
+            "region": []
+          },
+          "confidence": 0.95,
+          "model": "synthetic-fixture",
+          "prompt_version": "fixture-v1"
+        }
+      }
+    ],
+    "subtotal": {
+      "value": "100",
+      "evidence": {
+        "span": "100",
+        "region": []
+      },
+      "confidence": 0.95,
+      "model": "synthetic-fixture",
+      "prompt_version": "fixture-v1"
+    },
+    "tax": {
+      "value": "10",
+      "evidence": {
+        "span": "10",
+        "region": []
+      },
+      "confidence": 0.95,
+      "model": "synthetic-fixture",
+      "prompt_version": "fixture-v1"
+    },
+    "total": {
+      "value": "110",
+      "evidence": {
+        "span": "110",
+        "region": []
+      },
+      "confidence": 0.95,
+      "model": "synthetic-fixture",
+      "prompt_version": "fixture-v1"
+    }
+  }
+}

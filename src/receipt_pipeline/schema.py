@@ -101,4 +101,6 @@ def validate(receipt: Receipt, threshold: float = 0.8) -> list[str]:
             reasons.append(f"invalid_region:{path}")
         if isinstance(obs.value, Decimal) and (not obs.value.is_finite() or obs.value < 0):
             reasons.append(f"invalid_amount:{path}")
+        if path.endswith(".quantity") and obs.value is not None and obs.value <= 0:
+            reasons.append(f"invalid_quantity:{path}")
     return reasons

@@ -18,3 +18,5 @@ data/
 dbt/target/
 dbt/logs/
 .dagster/
+
+dbt/.user.yml
