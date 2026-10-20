@@ -1,0 +1,14 @@
+version: 2
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: receipts
+        columns:
+          - name: receipt_id
+            data_tests: [not_null, unique]
+      - name: extractions
+        columns:
+          - name: run_key
+            data_tests: [not_null, unique]
+      - name: corrections

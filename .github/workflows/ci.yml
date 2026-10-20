@@ -1,0 +1,32 @@
+name: offline-quality
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: receipts
+          POSTGRES_PASSWORD: receipts
+          POSTGRES_DB: receipts
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U receipts -d receipts"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://receipts:receipts@localhost:5432/receipts
+      RUN_POSTGRES_TESTS: '1'
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+      DEEPEVAL_TELEMETRY_OPT_OUT: 'YES'
+      DAGSTER_TELEMETRY_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run pytest
+      - run: uv run receipts ci-seed
+      - run: uv run receipts dbt

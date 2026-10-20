@@ -1,6 +1,6 @@
 from datetime import date
 from decimal import Decimal, InvalidOperation
-from typing import Generic, TypeVar
+from typing import TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -15,7 +15,7 @@ class Evidence(BaseModel):
     )
 
 
-class Observed(BaseModel, Generic[T]):
+class Observed[T](BaseModel):
     model_config = ConfigDict(extra="forbid")
     value: T | None
     evidence: Evidence
@@ -92,8 +92,12 @@ def validate(receipt: Receipt, threshold: float = 0.8) -> list[str]:
         if obs.value is not None and not obs.evidence.span and not obs.evidence.region:
             reasons.append(f"missing_evidence:{path}")
         box = obs.evidence.region
-        if box and (len(box) != 4 or not all(0 <= x <= 1 for x in box)
-                    or box[0] >= box[2] or box[1] >= box[3]):
+        if box and (
+            len(box) != 4
+            or not all(0 <= x <= 1 for x in box)
+            or box[0] >= box[2]
+            or box[1] >= box[3]
+        ):
             reasons.append(f"invalid_region:{path}")
         if isinstance(obs.value, Decimal) and (not obs.value.is_finite() or obs.value < 0):
             reasons.append(f"invalid_amount:{path}")

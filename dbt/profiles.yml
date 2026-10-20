@@ -1,0 +1,14 @@
+config:
+  send_anonymous_usage_stats: false
+receipts:
+  target: local
+  outputs:
+    local:
+      type: postgres
+      host: "{{ env_var('PGHOST', 'localhost') }}"
+      user: "{{ env_var('PGUSER', 'receipts') }}"
+      password: "{{ env_var('PGPASSWORD', 'receipts') }}"
+      port: "{{ env_var('PGPORT', '5432') | int }}"
+      dbname: "{{ env_var('PGDATABASE', 'receipts') }}"
+      schema: analytics
+      threads: 2

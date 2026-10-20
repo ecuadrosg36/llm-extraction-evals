@@ -1,0 +1,14 @@
+name: receipt_warehouse
+version: '1.0.0'
+config-version: 2
+profile: receipts
+model-paths: [models]
+test-paths: [tests]
+models:
+  receipt_warehouse:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    marts:
+      +materialized: table
